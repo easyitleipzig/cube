@@ -1,0 +1,68 @@
+/*
+	if you use a different addPraefix replace "tr_" with your praefix
+*/
+#tricky {
+	background-image: url(../images/background_kniffel.png);
+	color: white;
+	background-size: contain;
+}
+#tr_Top, #tr_Bottom {
+	height: 40px;
+	padding: 0.5em;
+}
+#tr_Top {
+	border-radius: 5px;
+	background-color: silver;
+}
+#tr_shuffle, #tr_forward {
+	height: 20px;
+	width: 20px;
+	display: block;
+}
+#tr_cubeAreaBottom, #tr_cubeAreaTop {
+	display: inline-block;
+}
+#tr_ctrlArea {
+	display: inline-block;
+	height: 38px;
+}
+#tr_shuffle {
+	background-image: url(../images/kniffel_cube.png);
+	background-size: contain;
+}
+#tr_forward {
+	background-image: url(icons/cRight.png);
+	background-size: contain;
+}
+#tr_trials {
+	display: inline-block;
+}
+img[id^=tr_cube_] {
+	padding-left: 0.05em;
+	padding-right: 0.05em;
+	width: 35px;
+	height: 35px;
+}
+#tr_results {
+	margin: 0.5em;
+}
+#tr_results>div {
+	border-bottom: 1px grey solid;
+    margin-bottom: 2px;
+}
+#tr_results>div>label {
+	display: inline-block;
+}
+#tr_results>div>label:first-child {
+	width: 110px;
+}
+#tr_results>div>label:nth-child(2) {
+	width: 100px;
+}
+#tr_results>div>label:nth-child(3) {
+	width: 20px;
+	text-align: center;
+	cursor: pointer;
+	border-bottom: 1px solid silver;
+    margin-bottom: 2px;
+}

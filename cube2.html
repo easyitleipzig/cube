@@ -1,0 +1,33 @@
+
+<html>
+<head>
+        <title>JavaScript Kurs; Arrays (W&uuml;rfel_2a)</title>
+<style>
+</style>
+</head>
+<body>
+<div id="einWuerfel" class="row">
+    <div class="col-sm-12" style="padding-top:40px">   
+        <p><button class="btn btn-primary" onclick="wuerfeln()">Würfeln</button></p> 
+            <img id="bild" src="img/wuerfel.jpg" alt="Würfel" style="width:150px;margin-top:30px;margin-left:30px;">
+            <hr>
+            <button class="btn btn-primary" onclick="einWuerfel()">2 Würfel</button>
+            <input type="text" value="0" id="timerVal">
+    </div> 
+</div> 
+<script src="../../regenbogen/library/javascript/no_jquery.js"></script> 
+<script src="../../regenbogen/library/javascript/easyit_helper_neu.js"></script> 
+<script src="../../regenbogen/library/javascript/main.js"></script> 
+<script>
+    var timerMax = 2000, timerDiff = 200, startTimer = 0;
+    function setTimer() {
+        nj( "#timerVal" ).v( parseInt( nj( "#timerVal" ).v( ) ) + timerDiff );
+        if( parseInt( nj( "#timerVal" ).v( ) ) < timerMax ) {
+            window.setTimeout(setTimer, timerDiff ); 
+        }
+    }
+    setTimer();
+    //window.setTimeout(setTimer, timerDiff ); 
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+
+<html>
+<head>
+        <title>JavaScript Kurs; Arrays (W&uuml;rfel_2a)</title>
+        <script type="text/javascript">
+            function Wuerfel_2a(){
+             var Zufallszahl;
+             var Bild=["images/w0.gif", "images/w1.gif","images/w2.gif","images/w3.gif","images/w4.gif","images/w5.gif","images/w6.gif"];
+                 for(i=1;i<=5;i++){
+                         // die ElementId wird aus einem Text ('BW') und einer Variablen (i) zusammengesetzt
+                         var Ausgabebild=document.getElementById('BW' + i);
+                         Zufallszahl=Math.random();
+                         Zufallszahl=Math.ceil(Zufallszahl*6);
+                         Ausgabebild.src=Bild[Zufallszahl];
+                 }
+            }
+        </script>
+</head>
+<body>
+        <h1>JavaScript Kurs; Arrays (W&uuml;rfel_2a)</h1>
+        <h2></h2>
+        <!-- Schaltfläche auf HTML Seite; onclick Ereignis startet JavaScript  -->
+        <p align="center"><input type="submit" value="W&uuml;rfeln" onclick="Wuerfel_2a();">
+           <br><br>
+           <table border="0" cellpadding="0" cellspacing="2">
+                 <tr>
+                  <td><img src="images/w0.gif" id="BW1" alt="" border="0" width="33" height="31"></td>
+                  <td><img src="images/w0.gif" id="BW2" alt="" border="0" width="33" height="31"></td>
+                  <td><img src="images/w0.gif" id="BW3" alt="" border="0" width="33" height="31"></td>
+                  <td><img src="images/w0.gif" id="BW4" alt="" border="0" width="33" height="31"></td>
+                  <td><img src="images/w0.gif" id="BW5" alt="" border="0" width="33" height="31"></td>
+                 </tr>
+                </table></p>
+</body>
+</html>
