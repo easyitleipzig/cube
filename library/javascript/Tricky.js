@@ -41,9 +41,13 @@ class Tricky {
 			class:				"",
 			target: 			document.body,
 			countCubes:  		5,
+			multi:  			true,
+			game:  				1,
+			player:  			1,
+			modal:  			false,
 		}
 		let el;
-		this.oldResult = { line: -1, result: -1 };
+		this.oldResult = { trial: -1, line: -1, result: -1 };
 		Object.assign( this.opt, setup );
 		el = nj().cEl( "div" );
 		if( this.opt.id === "" ) this.opt.id = "#" + this.opt.dVar;
@@ -63,11 +67,29 @@ class Tricky {
 				height: 400,
 				autoOpen: true,
 				hasHelp: true,
+				modal: this.opt.modal,
 			});
 		nj( "label[id^=" + this.opt.addPraefix + "res_]").on( "click", function() {
 			nj( this ).Dia().setResult( getIdAndName( this.id ).Id );
 		});
 	}
+    evaluateTricky = function ( data ) {
+        // content
+        let jsonobject, l, i, m, j, tmp, decVal, strVal;
+        if( typeof data === "string" ) {
+            jsonobject = JSON.parse( data );
+        } else {
+            jsonobject = data;
+        }
+        if( !nj().isJ( jsonobject ) ) {
+            throw "kein JSON-Objekt übergeben";
+        }
+        console.log( jsonobject );
+        var tricky = window[ jsonobject.dVar ];
+        switch( jsonobject.command ) {
+
+        }
+    }
 	checkEmpty = function( v ) {
 		return v == "&nbsp;"
 	}
@@ -196,8 +218,42 @@ class Tricky {
 		}
 		return chance;
 	}
+	setNetResults = function( data ) {
+		nj().bDV( this.opt.dVar + ".dGame").options( "title", data.name );
+		nj( "#" + this.opt.addPraefix + "cubeAreaTop" ).htm("");
+		nj( "#" + this.opt.addPraefix + "cubeAreaBottom" ).htm("");tr_shuffle
+		nj( "#" + this.opt.addPraefix + "shuffle, #" + this.opt.addPraefix + "forward, #" + this.opt.addPraefix + "trialVal" ).sty("display", "none");
+		let l = data.top.length, el;
+		let i = 0;
+		while ( i < l ) {
+			el = nj().cEl( "img" ), i;
+			el.id = this.opt.addPraefix + "cube_" + this.opt.index;
+			nj( el ).atr( "src", "library/css/icons/cube_blau_" + data.top[i].val + ".png" );
+			//nj( el ).atr( "data-dvar", this.opt.dVar );
+				nj( "#" + this.opt.addPraefix + "cubeAreaTop" ).aCh( el );			
+			i += 1;
+		}
+		l = data.bottom.length;
+		i = 0;
+		while ( i < l ) {
+			el = nj().cEl( "img" ), i;
+			el.id = this.opt.addPraefix + "cube_" + this.opt.index;
+			nj( el ).atr( "src", "library/css/icons/cube_blau_" + data.bottom[i].val + ".png" );
+			//nj( el ).atr( "data-dvar", this.opt.dVar );
+				nj( "#" + this.opt.addPraefix + "cubeAreaBottom" ).aCh( el );			
+			i += 1;
+		}
+		l = data.results.length;
+		i = 0;
+		while ( i < l ) {
+			nj( "#" + this.opt.addPraefix + "res_" + i ).htm( data.results[i].val );			
+			i += 1;
+		}
+	}
+
 	setResult = function( line ) {
-		let cubes = nj().fOA( this.deck.cubes, "isTop", true), res;
+		console.log( this.oldResult.trial == nj( "#" + this.opt.addPraefix + "trialVal" ).htm(), this.oldResult );
+		let cubes = nj().fOA( this.deck.cubes, "isTop", true), res, oldRes = nj( "#" + this.opt.addPraefix + "res_" + line ).htm();
 		if( cubes.length === 0 ) {
 			dMNew.show( {title: "Fehler", type: false, text: "Du musst mindestens einen Würfel im oberen Deck haben."} );
 			return;
@@ -252,19 +308,64 @@ class Tricky {
 		}
 		//nj( "#" + this.opt.addPraefix + "trialVal" ).htm( nj( "#" + this.opt.addPraefix + "trialVal" ).htm() - 1 )
 		//nj( "#" + this.opt.addPraefix + "cubeAreaTop" ).htm("");
-		this.oldResult = { line: line, result: res }
+		if( this.oldResult.trial == nj( "#" + this.opt.addPraefix + "trialVal" ).htm() ) {
+			nj( "#" + this.opt.addPraefix + "res_" + this.oldResult.line ).htm( this.oldResult.result );			
+		}
+		this.oldResult = {trial: nj( "#" + this.opt.addPraefix + "trialVal" ).htm(), line: line, result: oldRes }
 	}
 	forward = function( el ) {
 		console.log( JSON.stringify( this.oldResult ) );
-		if( JSON.stringify( this.oldResult ) === '{"line":-1,"result":-1}' ) {
+		if( JSON.stringify( this.oldResult ) === '{"trial":-1,"line":-1,"result":-1}' ) {
 			dMNew.show( { title: "Fehler", type: false, text: "Du musst erst ein Ergebnis anklicken." } );
 			return;
 		}
-		dMNew.show( {title: "Weitergeben", type: "question", text: "Willst Du das Spiel wirklich an den nächsten Spieler weitergeben?", buttons: [
+		dMNew.show( {title: "Weitergeben", type: "question", text: "Willst Du das Spiel wirklich an den nächsten Spieler weitergeben?", variables: {tricky: this }, buttons: [
 				{
 					title: "Ja",
 					action: function( e ) {
-						console.log( nj( e.target ).Dia() );
+						let data = {};
+						data.res = {};
+						data.command = "saveValues";
+						let cTop = nj().els( "#" + nj( e.target ).Dia().opt.variables.tricky.opt.addPraefix + "cubeAreaTop img" );
+						let cBot = nj().els( "#" + nj( e.target ).Dia().opt.variables.tricky.opt.addPraefix + "cubeAreaBottom img" );
+						console.log( cTop );
+						let cTopV = [];
+						let cBotV = [];
+						let cResV = [];
+						let l = cTop.length;
+						let i = 0;
+						while ( i < l ) {
+							cTopV.push( nj().bDV( nj(cTop[i]).ds("dvar") ).value );
+							i += 1;
+						}
+						l = cBot.length;
+						i = 0;
+						while ( i < l ) {
+							cBotV.push( nj().bDV( nj(cBot[i]).ds("dvar") ).value );
+							i += 1;
+						}
+						let cRes = nj().els( "label[id^=" + nj( e.target ).Dia().opt.variables.tricky.opt.addPraefix + "res_]" );
+						l = cRes.length;
+						i = 0;
+						while ( i < l ) {
+							cResV.push( nj(cRes[i]).htm() );
+							i += 1;
+						}
+						data.dVar = nj( e.target ).Dia().opt.variables.tricky.opt.dVar;
+        				data.game = nj( e.target ).Dia().opt.variables.tricky.opt.game;
+        				data.player = nj( e.target ).Dia().opt.variables.tricky.opt.player;
+        				let cubes = {top:cTopV,bottom:cBotV};
+        				let results = {result:cResV};
+        				data.cubes = JSON.stringify( cubes );
+        				data.res = JSON.stringify( results );
+        				console.log( data );
+        				nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( e.target ).Dia().opt.variables.tricky.evaluateTricky );
+					}
+				},
+				{
+					title: "Nein",
+					action: function( e ) {
+						dMNew.hide();
 					}
 				}
 			] } );

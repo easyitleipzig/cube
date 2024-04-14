@@ -21,6 +21,7 @@
 }
 #tr_cubeAreaBottom, #tr_cubeAreaTop {
 	display: inline-block;
+	width: 195px;
 }
 #tr_ctrlArea {
 	display: inline-block;

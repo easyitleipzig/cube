@@ -1,7 +1,7 @@
 //javascript
 const PATH_TO_MESSAGE_CSS = "library/css/MessageNew.css";
 const MESSAGE_HTML = '<div><div class="[class]"></div><div><div>[content]</div></div></div>'
-var dMNew;
+//var dMNew;
 class Message {
       constructor( param ) {
         this.opt = {
@@ -19,7 +19,7 @@ class Message {
             autoOpen:           false, // optional - true/false
             center:             true, // optional - true/false
             rootCenter:         true, // a temporary value for saving start center
-            addClasses:         "diaMess", // optional - additional classes divide by " " - "diaMess" should be allways set for correct css
+            addClasses:         "diaMess.css", // optional - additional classes divide by " " - "diaMess" should be allways set for correct css
             hasIcon:            false, // optional - true/false
             hasMin:             false,
             hasMax:             false,
@@ -41,8 +41,6 @@ class Message {
             modal: this.opt.modal,
             center: this.opt.center,
             canResize: this.opt.canResize,
-            hasMin: true,
-            //variables: this.opt.variables,
         } );
     }
     show = function( args ) {
@@ -54,7 +52,7 @@ class Message {
                     b = {};
                     b.title = "Okay";
                     b.action = function( el ){
-                        nj( this ).Dia().hide();
+                        nj( nj().els( el.target ) ).Dia().hide();
                     };
                     this.opt.buttons.push( b ); 
                 args.buttons = this.opt.buttons;
@@ -103,15 +101,20 @@ class Message {
                 args.innerHTML = MESSAGE_HTML.replace( "[class]", "messUndefined" ) 
             }
             if( typeof args.text !== "undefined" ) {
-                console.log( args.text );
                 args.innerHTML = args.innerHTML.replace( "[content]", args.text ) 
             }
         }
         this.opt.divMess.show( args );
-        nj( "#mess_footer>button:last-child").f();        
+        try {
+            nj( "#mess_footer>button:last-child").f();
+        }   catch (error) {
+            //console.error(error);
+            console.log( "Es kann kein erster Button fokussiert werden." );
+        }
+        this.opt.divMess.options( "correctCenterMaxZI" );
     }
     hide = function() {
         this.opt.divMess.hide();        
     }
 }
-dMNew = new Message( {dVar: "dMNew", modal: false, center: true, addClasses: "diaMess" } );
+var dMNew = new Message( {dVar: "dMNew", modal: true, addClasses: "diaMess" } );
