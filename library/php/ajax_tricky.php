@@ -70,5 +70,15 @@ switch( $_POST["command"]) {
         $return -> res = $tr -> getValues( $_POST["game"], $_POST["player"] ); 
         print_r( json_encode( $return )); 
     break;
+    case "isReady":
+        $return -> dVar = $_POST["dVar"];
+        $return -> ready = $tr -> isReady( $_POST["game"] ) -> isRead; 
+        print_r( json_encode( $return )); 
+    break;
+    case "getNextPlayer":
+        $return -> dVar = $_POST["dVar"];
+        $return -> player = $tr -> getNextPlayer( $_POST["game"], $_POST["move"] ) -> isRead; 
+        print_r( json_encode( $return )); 
+    break;
 }
 ?>

@@ -72,13 +72,44 @@ class Tricky {
         $s = $this -> pdo -> query( $q );
         $r = $s -> fetchAll( PDO::FETCH_ASSOC );
         $result -> results = $r;
-        $q = "UPDATE `game_move_isread` SET `is_read` = '1' WHERE game_id = $id and player_id = $player";
+        $q = "UPDATE `game_move_isread` SET `is_read` = '1', move_id = $cMove WHERE game_id = $id and player_id = $player";
         $this -> pdo -> query( $q );
-        $q = "select firstname from user where id = $player";
+        $q = "select firstname from user, game_player where user.id = game_player.player_id and game_player.id = $player and game_id = $id";
         $s = $this -> pdo -> query( $q );
         $r = $s -> fetchAll( PDO::FETCH_ASSOC );
         $result -> name = $r[0]["firstname"];
         return $result;
+    }
+    public function isReady( $id ) {
+        $result = new \stdClass();
+        $q = "select current_move from game where id = $id";
+        $s = $this -> pdo -> query( $q );
+        $r = $s -> fetchAll( PDO::FETCH_ASSOC );
+        $q = "select count( is_read ) as is_read from game_move_isread where game_id = $id and move_id = " . $r[0]["current_move"] . " and is_read = false";
+        $s = $this -> pdo -> query( $q );
+        $r = $s -> fetchAll( PDO::FETCH_ASSOC );
+        if( $r[0]["is_read"] > 0 ) {
+            $result -> isRead = false;
+        } else {
+            $result -> isRead = true;
+        }        
+        return $result;
+    }
+    public function getNextPlayer( $id ) {
+        $result = new \stdClass();
+        $q = "select max( current_player ) as maxPlayer from game where id = $id";
+        $s = $this -> pdo -> query( $q );
+        $r = $s -> fetchAll( PDO::FETCH_ASSOC );
+        $maxPlayer = $r[0]["maxPlayer"];
+        $q = "select current_player from game where id = $id";
+        $s = $this -> pdo -> query( $q );
+        $r = $s -> fetchAll( PDO::FETCH_ASSOC );
+        $cPlayer = $r[0]["current_player"];
+        if( $maxPlayer === $cPlayer ) {
+            return 1;
+        } else {
+            return $cPlayer + 1;
+        }
     }
 }
 ?>

@@ -95,6 +95,29 @@ class Tricky {
         	break;
         }
     }
+    newGame = function() {
+    	this.oldResult = { trial: -1, line: -1, result: -1 };
+    	this.deck.cubes = [];
+    	let l = 17;
+    	let i = 0;
+    	while ( i < l ) {
+    		if( i === 6 || i === 7 || i === 15 || i === 16 ) {
+    			nj( "#" + this.opt.addPraefix + "res_" + i ).htm( "0" );
+    		}
+    		i += 1;
+    	}
+    	nj( "#" + this.opt.addPraefix + "trialVal" ).htm(3);
+    	nj( "#" + this.opt.addPraefix + "shuffle" ).sty( "display", "block");
+    	nj( "#" + this.opt.addPraefix + "cubeAreaTop" ).htm("");
+    	nj( "#" + this.opt.addPraefix + "cubeAreaBottom" ).htm("");
+		l = 5;
+		i = 0;
+		while ( i < l ) {
+			this.deck.cubes.push( new Cube({dVar: this.opt.dVar + ".deck.cubes." + i, index: i, addPraefix: this.opt.addPraefix } ) );
+		//this.deck.cubes.setBehavior();
+			i += 1;
+		}
+    }
     newThrow = function() {
     	this.oldResult = { trial: -1, line: -1, result: -1 };
     	this.deck.cubes = [];
@@ -115,7 +138,7 @@ class Tricky {
     	data.command = "isReady";
     	data.dVar = nj().bDV( nj("body").ds( "game" ) ).opt.dVar;
     	data.game = nj().bDV( nj("body").ds( "game" ) ).opt.game;
-		nj().fetchPostNew("library/php/ajax_tricky.php", data, nj().bDV( nj("body").ds( "game" ) ).evaluateTricky );    
+		//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj().bDV( nj("body").ds( "game" ) ).evaluateTricky );    
 	}
 	checkEmpty = function( v ) {
 		return v == "&nbsp;"
@@ -157,8 +180,7 @@ class Tricky {
 			slots.push( { i: i, v: nj( els[i] ).htm(), d: difficulty[i], diff: diff }  )
 			i += 1;
 		}
-		console.log( slots, slots.filter ((obj) => obj.v === "&nbsp;") );
-
+		return slots.filter ((obj) => obj.v === "&nbsp;");
 	}
 	getCounts = function( cubes ) {
 		let l = 7, counts = [];
@@ -169,7 +191,23 @@ class Tricky {
 		}
 		return counts;
 	}
-	buildTopSum = function( cubes ) {
+	sumOverAll = function( line ) {
+		els = nj().els( "#" + this.opt.addPraefix + "cubeAreaTop img");
+		let l = els.length, tmp=[], sum = 0;
+		let i = 0;
+		while ( i < l ) {
+			tmp.push("#" + els[i].id);
+			i += 1;
+		}
+		l = tmp.length;
+		i = 0;
+		while ( i < l ) {
+			sum += nj(tmp[i]).Dia().value;
+			i += 1;
+		}
+		return sum;
+	}
+	buildTopSum = function() {
 		let els = nj().els("#" + this.opt.addPraefix + "res_0, #" + this.opt.addPraefix + "res_1, #" + this.opt.addPraefix + "res_2,#" + this.opt.addPraefix + "res_3, #" + this.opt.addPraefix + "res_4, #" + this.opt.addPraefix + "res_5"), sum = 0, add = 0;
 		let l = 6
 		let i = 0;
@@ -182,6 +220,16 @@ class Tricky {
 			add = 35;
 		}
 		nj( "#" + this.opt.addPraefix + "res_7" ).htm( sum + add )
+	}
+	buildBottomSum = function() {
+		let els = nj().els("#" + this.opt.addPraefix + "res_8, #" + this.opt.addPraefix + "res_9, #" + this.opt.addPraefix + "res_10,#" + this.opt.addPraefix + "res_11, #" + this.opt.addPraefix + "res_12, #" + this.opt.addPraefix + "res_13, #" + this.opt.addPraefix + "res_14"), sum = 0;
+		let l = els.length;
+		let i = 0;
+		while ( i < l ) {
+			if( nj( els[i] ).htm() !== "&nbsp;" && nj( els[i] ).htm() !== "X") sum += parseInt( nj( els[i] ).htm() );
+			i += 1;
+		}
+		nj( "#" + this.opt.addPraefix + "res_15" ).htm( sum )
 	}
 	getCountValues = function( cubes, minCount ) {
 		let counts = this.getCounts( cubes );
@@ -204,7 +252,7 @@ class Tricky {
 	checkBigStreet = function( cubes ) {
 		let counts = this.getCounts( cubes );
 		counts = counts.toString();
-		if( counts === "1,1,1,1,1,1" ) {
+		if( counts === "1,1,1,1,1,0" || counts === "0,1,1,1,1,1" ) {
 			return 40;
 		} else { 
 			return "X"
@@ -219,8 +267,7 @@ class Tricky {
 			i += 1;
 		}
 		counts = counts.toString();
-		console.log( counts );
-		if( counts === "0,1,1,1,1,1" || counts === "1,1,1,1,1,0") {
+		if( counts === "1,1,1,1,0,0" || counts === "0,1,1,1,1,0" || counts === "0,0,1,1,1,1") {
 			return 30;
 		} else { 
 			return "X"
@@ -234,16 +281,6 @@ class Tricky {
 		} else { 
 			return "X"
 		}
-	}
-	getChance = function( cubes ) {
-		let counts = this.getCounts( cubes );
-		let l = counts.length, chance = 0;
-		let i = 0;
-		while ( i < l ) {
-			chance += counts[i] * ( i + 1 );
-			i += 1;
-		}
-		return chance;
 	}
 	setNetResults = function( data ) {
 		nj( "#" + this.opt.dVar + ".dGameHLTitle").htm( data.name );
@@ -277,7 +314,6 @@ class Tricky {
 			i += 1;
 		}
 	}
-
 	setResult = function( line ) {
 		console.log( this.oldResult.trial == nj( "#" + this.opt.addPraefix + "trialVal" ).htm(), this.oldResult );
 		let cubes = nj().fOA( this.deck.cubes, "isTop", true), res, oldRes = nj( "#" + this.opt.addPraefix + "res_" + line ).htm();
@@ -292,24 +328,35 @@ class Tricky {
 			break;
 		case "1":
 			res = nj().fOA( cubes, "value", 2 ).length * 2;
+			if( res === 0 ) res = "X";
 			break;
 		case "2":
 			res = nj().fOA( cubes, "value", 3 ).length * 3;
+			if( res === 0 ) res = "X";
 			break;
 		case "3":
 			res = nj().fOA( cubes, "value", 4 ).length * 4;
+			if( res === 0 ) res = "X";
 			break;
 		case "4":
 			res = nj().fOA( cubes, "value", 5 ).length * 5;
+			if( res === 0 ) res = "X";
 			break;
 		case "5":
 			res = nj().fOA( cubes, "value", 6 ).length * 6;
+			if( res === 0 ) res = "X";
 			break;
 		case "8":
 			res = this.getCountValues( cubes, 3 );
+			if( res > 0 ) {
+				res = this.sumOverAll();
+			}
 			break;
 		case "9":
 			res = this.getCountValues( cubes, 4 );
+			if( res > 0 ) {
+				res = this.sumOverAll();
+			}
 			break;
 		case "10":
 			res = this.checkFullHouse( cubes );
@@ -324,7 +371,7 @@ class Tricky {
 			res = this.checkTricky( cubes );
 			break;
 		case "14":
-			res = this.getChance( cubes );
+			res = this.sumOverAll();
 			break;
 		default:
 			break;
@@ -333,10 +380,30 @@ class Tricky {
 		if( line < 6 ) {
 			this.buildTopSum();
 		}
-		//nj( "#" + this.opt.addPraefix + "trialVal" ).htm( nj( "#" + this.opt.addPraefix + "trialVal" ).htm() - 1 )
-		//nj( "#" + this.opt.addPraefix + "cubeAreaTop" ).htm("");
+		if( line > 7 ) {
+			this.buildBottomSum();
+		}
+		let all = parseInt( nj( "#" + this.opt.addPraefix + "res_7" ).htm() ) + parseInt( nj( "#" + this.opt.addPraefix + "res_15" ).htm() );
+		nj( "#" + this.opt.addPraefix + "res_16" ).htm( all );
 		if( this.oldResult.trial == nj( "#" + this.opt.addPraefix + "trialVal" ).htm() ) {
 			nj( "#" + this.opt.addPraefix + "res_" + this.oldResult.line ).htm( this.oldResult.result );			
+		}
+		if( this.getFreeSlots().length !== 0 ) {
+			dMNew.show( { title: "Spielende", type: true, text: "Das Spiel ist beendet. Du hast " + all + " Punkte erreicht.", variables: { tricky: this }, buttons:[
+					{
+						title: "Neues Spiel",
+						action: function() {
+							dMNew.hide();
+							nj( this ).Dia().opt.variables.tricky.newGame();
+						}
+					},
+					{
+						title: "Beenden",
+						action: function() {
+							location.assign( "intern.php");
+						}
+					}
+				] } );
 		}
 		this.oldResult = {trial: nj( "#" + this.opt.addPraefix + "trialVal" ).htm(), line: line, result: oldRes }
 	}
@@ -379,26 +446,29 @@ class Tricky {
 		return data;
 	}
 	forward = function( el ) {
-		console.log( JSON.stringify( this.oldResult ) );
 		if( JSON.stringify( this.oldResult ) === '{"trial":-1,"line":-1,"result":-1}' ) {
 			dMNew.show( { title: "Fehler", type: false, text: "Du musst erst ein Ergebnis anklicken." } );
 			return;
 		}
-		dMNew.show( {title: "Weitergeben", type: "question", text: "Willst Du das Spiel wirklich an den nächsten Spieler weitergeben?", variables: {tricky: this }, buttons: [
-				{
-					title: "Ja",
-					action: function( e ) {
-						let data = nj( e.target ).Dia().opt.variables.tricky.buildJSON( nj( e.target ).Dia().opt.variables.tricky.opt );
-						console.log( data );
-        				nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( e.target ).Dia().opt.variables.tricky.evaluateTricky );
+		if( this.opt.multi ) {
+			dMNew.show( {title: "Weitergeben", type: "question", text: "Willst Du das Spiel wirklich an den nächsten Spieler weitergeben?", variables: {tricky: this }, buttons: [
+					{
+						title: "Ja",
+						action: function( e ) {
+							let data = nj( e.target ).Dia().opt.variables.tricky.buildJSON( nj( e.target ).Dia().opt.variables.tricky.opt );
+	        				//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( e.target ).Dia().opt.variables.tricky.evaluateTricky );
+						}
+					},
+					{
+						title: "Nein",
+						action: function( e ) {
+							dMNew.hide();
+						}
 					}
-				},
-				{
-					title: "Nein",
-					action: function( e ) {
-						dMNew.hide();
-					}
-				}
-			] } );
+				] } );
+		} else {
+			this.newThrow();
+		}
+
 	}
 }

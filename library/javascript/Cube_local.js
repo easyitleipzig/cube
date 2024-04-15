@@ -32,27 +32,27 @@ class Cube {
 				nj( this ).Dia().isTop = false;
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 				nj( "#" + this.id ).on( "click", function() {
 					nj( "#" + nj( this ).Dia().opt.addPraefix + "cubeAreaTop" ).aCh( this );	
 					nj( this ).Dia().isTop = true;
 					nj( this ).Dia("dvar", 2 ).sortTopDeck();
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 					nj( "#" + this.id ).on( "click", function(e) {
 						e.stopImmediatePropagation();
 						nj( "#" + nj( this ).Dia().opt.addPraefix + "cubeAreaBottom" ).aCh( this );	
 						nj( this ).Dia().isTop = false;
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 						nj( "#" + this.id ).on( "click", function() {
 							nj( "#" + nj( this ).Dia().opt.addPraefix + "cubeAreaTop" ).aCh( this );	
 							nj( this ).Dia().isTop = true;
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 						});
 					});
 				});
@@ -62,27 +62,27 @@ class Cube {
 				nj( this ).Dia("dvar", 2 ).sortTopDeck();
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 				nj( "#" + this.id ).on( "click", function(e) {
 					e.stopImmediatePropagation();
 					nj( "#" + nj( this ).Dia().opt.addPraefix + "cubeAreaBottom" ).aCh( this );	
 					nj( this ).Dia().isTop = false;
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 					nj( "#" + this.id ).on( "click", function() {
 						nj( "#" + nj( this ).Dia().opt.addPraefix + "cubeAreaTop" ).aCh( this );	
 						nj( this ).Dia().isTop = true;
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 						nj( "#" + this.id ).on( "click", function(e) {
 							e.stopImmediatePropagation();
 							nj( "#" + nj( this ).Dia().opt.addPraefix + "cubeAreaBottom" ).aCh( this );	
 							nj( this ).Dia().isTop = false;
 					let data = nj( this ).gRO().buildJSON( nj( this ).gRO().opt );
 					console.log( data );
-        			nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
+        			//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( this ).gRO().evaluateTricky );
 						});
 					});
 				});
