@@ -17,12 +17,12 @@
 <body>
 <input type="button" id="resetInterval">
 <input type="button" id="setInterval">
-<script src="../../regenbogen/library/javascript/no_jquery.js"></script> 
-<script src="../../regenbogen/library/javascript/easyit_helper_neu.js"></script> 
-<script src="../../regenbogen/library/javascript/main.js"></script> 
-<script src="../../regenbogen/library/javascript/DropResize.js"></script> 
-<script src="../../regenbogen/library/javascript/DialogDR.js"></script> 
-<script src="../../regenbogen/library/javascript/MessageDR.js"></script> 
+<script src="library/javascript/no_jquery.js"></script> 
+<script src="library/javascript/easyit_helper_neu.js"></script> 
+<script src="library/javascript/main.js"></script> 
+<script src="library/javascript/DropResize.js"></script> 
+<script src="library/javascript/DialogDR.js"></script> 
+<script src="library/javascript/MessageDR.js"></script> 
 <script src="library/javascript/Cube.js"></script> 
 <script src="library/javascript/Deck.js"></script> 
 <script src="library/javascript/Tricky.js"></script> 

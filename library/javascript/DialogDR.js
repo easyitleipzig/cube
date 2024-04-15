@@ -154,7 +154,7 @@ class DialogDR {                    // dialog drag and resize
         nj( el ).aCh( el_add );
         el_add = null;
         el_add = nj().cEl( "div" );
-        el_add.id = this.opt.classPraefix + "HLTitle";
+        el_add.id = this.opt.dVar + "HLTitle";
         nj( el_add ).aCl( this.opt.classPraefix + "HLTitle" );
         nj( el_add ).txt( this.opt.title );
         nj( el ).aCh( el_add );
