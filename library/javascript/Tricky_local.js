@@ -388,7 +388,7 @@ class Tricky {
 		if( this.oldResult.trial == nj( "#" + this.opt.addPraefix + "trialVal" ).htm() ) {
 			nj( "#" + this.opt.addPraefix + "res_" + this.oldResult.line ).htm( this.oldResult.result );			
 		}
-		if( this.getFreeSlots().length !== 0 ) {
+		if( this.getFreeSlots().length === 0 ) {
 			dMNew.show( { title: "Spielende", type: true, text: "Das Spiel ist beendet. Du hast " + all + " Punkte erreicht.", variables: { tricky: this }, buttons:[
 					{
 						title: "Neues Spiel",
@@ -442,7 +442,6 @@ class Tricky {
 		let results = {result:cResV};
 		data.cubes = JSON.stringify( cubes );
 		data.res = JSON.stringify( results );
-		console.log( data );
 		return data;
 	}
 	forward = function( el ) {
