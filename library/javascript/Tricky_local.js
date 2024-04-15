@@ -193,7 +193,6 @@ class Tricky {
 	}
 	sumOverAll = function( line ) {
 		els = nj().els( "#" + this.opt.addPraefix + "cubeAreaTop img");
-		console.log( els );
 		let l = els.length, tmp=[], sum = 0;
 		let i = 0;
 		while ( i < l ) {
@@ -203,7 +202,6 @@ class Tricky {
 		l = tmp.length;
 		i = 0;
 		while ( i < l ) {
-			console.log(i, nj(tmp[i]).Dia().value );
 			sum += nj(tmp[i]).Dia().value;
 			i += 1;
 		}
@@ -269,8 +267,7 @@ class Tricky {
 			i += 1;
 		}
 		counts = counts.toString();
-		console.log( counts );
-		if( counts === "0,1,1,1,1,1" || counts === "1,1,1,1,1,0") {
+		if( counts === "1,1,1,1,0,0" || counts === "0,1,1,1,1,0" || counts === "0,0,1,1,1,1") {
 			return 30;
 		} else { 
 			return "X"
@@ -449,7 +446,6 @@ class Tricky {
 		return data;
 	}
 	forward = function( el ) {
-		console.log( JSON.stringify( this.oldResult ) );
 		if( JSON.stringify( this.oldResult ) === '{"trial":-1,"line":-1,"result":-1}' ) {
 			dMNew.show( { title: "Fehler", type: false, text: "Du musst erst ein Ergebnis anklicken." } );
 			return;
@@ -460,7 +456,6 @@ class Tricky {
 						title: "Ja",
 						action: function( e ) {
 							let data = nj( e.target ).Dia().opt.variables.tricky.buildJSON( nj( e.target ).Dia().opt.variables.tricky.opt );
-							console.log( data );
 	        				//nj().fetchPostNew("library/php/ajax_tricky.php", data, nj( e.target ).Dia().opt.variables.tricky.evaluateTricky );
 						}
 					},
