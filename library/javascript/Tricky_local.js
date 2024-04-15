@@ -95,6 +95,29 @@ class Tricky {
         	break;
         }
     }
+    newGame = function() {
+    	this.oldResult = { trial: -1, line: -1, result: -1 };
+    	this.deck.cubes = [];
+    	let l = 17;
+    	let i = 0;
+    	while ( i < l ) {
+    		if( i === 6 || i === 7 || i === 15 || i === 16 ) {
+    			nj( "#" + this.opt.addPraefix + "res_" + i ).htm( "0" );
+    		}
+    		i += 1;
+    	}
+    	nj( "#" + this.opt.addPraefix + "trialVal" ).htm(3);
+    	nj( "#" + this.opt.addPraefix + "shuffle" ).sty( "display", "block");
+    	nj( "#" + this.opt.addPraefix + "cubeAreaTop" ).htm("");
+    	nj( "#" + this.opt.addPraefix + "cubeAreaBottom" ).htm("");
+		l = 5;
+		i = 0;
+		while ( i < l ) {
+			this.deck.cubes.push( new Cube({dVar: this.opt.dVar + ".deck.cubes." + i, index: i, addPraefix: this.opt.addPraefix } ) );
+		//this.deck.cubes.setBehavior();
+			i += 1;
+		}
+    }
     newThrow = function() {
     	this.oldResult = { trial: -1, line: -1, result: -1 };
     	this.deck.cubes = [];
@@ -368,8 +391,22 @@ class Tricky {
 		if( this.oldResult.trial == nj( "#" + this.opt.addPraefix + "trialVal" ).htm() ) {
 			nj( "#" + this.opt.addPraefix + "res_" + this.oldResult.line ).htm( this.oldResult.result );			
 		}
-		if( this.getFreeSlots().length === 0 ) {
-
+		if( this.getFreeSlots().length !== 0 ) {
+			dMNew.show( { title: "Spielende", type: true, text: "Das Spiel ist beendet. Du hast " + all + " Punkte erreicht.", variables: { tricky: this }, buttons:[
+					{
+						title: "Neues Spiel",
+						action: function() {
+							dMNew.hide();
+							nj( this ).Dia().opt.variables.tricky.newGame();
+						}
+					},
+					{
+						title: "Beenden",
+						action: function() {
+							location.assign( "intern.php");
+						}
+					}
+				] } );
 		}
 		this.oldResult = {trial: nj( "#" + this.opt.addPraefix + "trialVal" ).htm(), line: line, result: oldRes }
 	}
