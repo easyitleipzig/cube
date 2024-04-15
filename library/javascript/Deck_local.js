@@ -7,7 +7,7 @@ const DIV_DECK_HTML = `<div id="[praefix]Top">
 		<input type="button" id="[praefix]shuffle">
 		<input type="button" id="[praefix]forward">
 	</div>
-	<div id="[praefix]trials"><label id="[praefix]trialVal" title="Anzahl Versuche">3</label></div>
+	<div id="[praefix]trials"><label id="[praefix]trialVal" style="color: red" title="Anzahl Versuche">3</label></div>
 </div>
 `;
 class Deck {
